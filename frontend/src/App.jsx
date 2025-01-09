@@ -1,12 +1,20 @@
-import { useState } from "react";
-import "./App.css";
+// import "./App.css";
+import { Container } from "react-bootstrap";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+// import HomeScreen from "./screens/HomeScreen";
+import { Outlet } from "react-router-dom";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <h1>Integration Demo Page</h1>
+      <Header />
+      <main className="py-3">
+        <Container>
+          <Outlet />
+        </Container>
+      </main>
+      <Footer />
     </>
   );
 }
