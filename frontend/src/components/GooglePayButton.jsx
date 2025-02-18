@@ -172,7 +172,7 @@ function GPayButton() {
       <GooglePayButton
         environment="TEST"
         buttonSizeMode="fill"
-        paymentRequest={test.current}
+        paymentRequest={paymentRequest}
         onLoadPaymentData={handleLoadPaymentData}
         onError={(error) => console.error(error)}
         onPaymentAuthorized={onPaymentAuthorized}
