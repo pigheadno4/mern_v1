@@ -1,6 +1,7 @@
 import PayPalButton from "./PayPalButton";
 import ACDCButton from "./ACDCButton";
 import GPayButton from "./GooglePayButton";
+import { usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 // import GooglePayButton from "./GooglePayButton";
 
@@ -14,7 +15,7 @@ function PayButton({ paymentMethod }) {
   //   }
 
   //   if (paymentMethod === "ACDC") payButton = <ACDCButton />;
-
+  const [{ isResolved }] = usePayPalScriptReducer();
   return (
     <>
       {/* <GooglePayButton /> */}
@@ -35,7 +36,7 @@ function PayButton({ paymentMethod }) {
         <PayPalButton paymentMethod={"VENMO"} />
       </div>
       <div hidden={paymentMethod === "GOOGLE" ? false : true}>
-        <GPayButton />
+        {isResolved && <GPayButton />}
       </div>
     </>
   );
