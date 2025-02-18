@@ -148,17 +148,22 @@ function GPayButton() {
   useEffect(() => {
     const preparePaymentRequest = async () => {
       const googlePayConfig = await paypal.Googlepay().config();
-      console.log(googlePayConfig);
+      console.log("googlePay Config", googlePayConfig);
       const allowPaymentMethods = googlePayConfig.allowPaymentMethods;
       console.log("allowPaymentMethods:", allowPaymentMethods);
       const merchantInfo = googlePayConfig.merchantInfo;
       console.log("merchantInfo:", merchantInfo);
-      const paymentRequest = { apiVersion: 2, apiVersionMinor: 0 };
-      paymentRequest.allowPaymentMethods = allowPaymentMethods;
-      paymentRequest.transactionInfo = getGoogleTransactionInfo();
-      paymentRequest.merchantInfo = merchantInfo;
-      console.log(paymentRequest);
-      setPaymentRequest(paymentRequest);
+      const paymentDataRequest = {
+        apiVersion: 2,
+        apiVersionMinor: 0,
+        ...allowPaymentMethods,
+        ...merchantInfo,
+      };
+      //   paymentDataRequest.allowPaymentMethods = allowPaymentMethods;
+      paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
+      //   paymentDataRequest.merchantInfo = merchantInfo;
+      console.log("paymentDataRequest", paymentDataRequest);
+      setPaymentRequest(paymentDataRequest);
     };
     preparePaymentRequest();
   }, [getGoogleTransactionInfo]);
