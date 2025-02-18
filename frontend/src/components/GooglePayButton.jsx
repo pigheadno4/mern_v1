@@ -149,19 +149,14 @@ function GPayButton() {
     const preparePaymentRequest = async () => {
       const googlePayConfig = await paypal.Googlepay().config();
       console.log("googlePay Config", googlePayConfig);
-      const allowPaymentMethods = googlePayConfig.allowPaymentMethods;
-      console.log("allowPaymentMethods:", allowPaymentMethods);
+      const allowedPaymentMethods = googlePayConfig.allowedPaymentMethods;
+      console.log("allowedPaymentMethods:", allowedPaymentMethods);
       const merchantInfo = googlePayConfig.merchantInfo;
       console.log("merchantInfo:", merchantInfo);
-      const paymentDataRequest = {
-        apiVersion: 2,
-        apiVersionMinor: 0,
-        ...allowPaymentMethods,
-        ...merchantInfo,
-      };
-      //   paymentDataRequest.allowPaymentMethods = allowPaymentMethods;
+      const paymentDataRequest = { apiVersion: 2, apiVersionMinor: 0 };
+      paymentDataRequest.allowPaymentMethods = allowedPaymentMethods;
       paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
-      //   paymentDataRequest.merchantInfo = merchantInfo;
+      paymentDataRequest.merchantInfo = merchantInfo;
       console.log("paymentDataRequest", paymentDataRequest);
       setPaymentRequest(paymentDataRequest);
     };
