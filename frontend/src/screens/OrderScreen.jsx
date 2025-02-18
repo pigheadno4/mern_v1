@@ -83,7 +83,7 @@ function OrderScreen() {
 
       const details = await response.json();
 
-      await payOrder({ orderId, details });
+      await payOrder({ orderId, details }).unwrap();
       refetch();
       toast.success("Transaction completed!");
     } catch (err) {
@@ -134,7 +134,7 @@ function OrderScreen() {
   return isLoading ? (
     <Loader />
   ) : error ? (
-    <Message variant="danger" />
+    <Message variant="danger">{error?.data?.message || error.error}</Message>
   ) : (
     <>
       <h1>Order {order._id}</h1>

@@ -40,6 +40,10 @@ function PlaceOrderScreen() {
     }
   };
 
+  const checkoutHandler = () => {
+    navigate("/checkout");
+  };
+
   return (
     <>
       <CheckoutSteps step1 step2 step3 step4 />
@@ -123,7 +127,9 @@ function PlaceOrderScreen() {
               </ListGroup.Item>
 
               <ListGroup.Item>
-                {error && <Message variant={"danger"}>{error}</Message>}
+                {error && (
+                  <Message variant={"danger"}>{error.data.message}</Message>
+                )}
               </ListGroup.Item>
 
               <ListGroup.Item>
@@ -134,6 +140,14 @@ function PlaceOrderScreen() {
                   onClick={placeOrderHandler}
                 >
                   Place Order
+                </Button>
+                <Button
+                  type="button"
+                  className="btn-block gap-4"
+                  disabled={cart.cartItems.length === 0}
+                  onClick={checkoutHandler}
+                >
+                  Checkout
                 </Button>
                 {isLoading && <Loader />}
               </ListGroup.Item>

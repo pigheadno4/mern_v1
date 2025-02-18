@@ -7,7 +7,7 @@ const createOrder = asyncHandler(async (req, res) => {
   //   console.log(PayPal_Request_Id);
   //   console.log(url);
   //   console.log(accessToken);
-  //   console.log(req.body);
+  console.log(req.body);
   const items = req.body.order.orderItems.map((x, index) => ({
     name: x.name,
     // sku: x.brand,
@@ -18,8 +18,8 @@ const createOrder = asyncHandler(async (req, res) => {
       value: x.price,
     },
   }));
-  //   console.log(req.body.order.orderItems);
-  //   console.log(items);
+  console.log(req.body.order.orderItems);
+  console.log(items);
 
   const response = await fetch(url, {
     method: "POST",
