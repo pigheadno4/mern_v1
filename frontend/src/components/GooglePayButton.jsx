@@ -18,7 +18,7 @@ function GPayButton() {
   const [createInternalOrder] = useCreateOrderMutation();
   const cart = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
-  const [paymentRequest, setPaymentRequest] = useState();
+  const [paymentRequest, setPaymentRequest] = useState({});
   //   const appendGoogleSdkScript = () => {
   //     const script = document.createElement("script");
   //     script.id = "google-sdk";
@@ -160,8 +160,8 @@ function GPayButton() {
       paymentDataRequest.merchantInfo = merchantInfo;
       paymentDataRequest.callbackIntents = ["PAYMENT_AUTHORIZATION"];
       console.log("paymentDataRequest", paymentDataRequest);
-      //   setPaymentRequest(paymentDataRequest);
-      test.current = paymentDataRequest;
+      setPaymentRequest(paymentDataRequest);
+      //   test.current = paymentDataRequest;
       console.log("test data", test.current);
     };
     preparePaymentRequest();
