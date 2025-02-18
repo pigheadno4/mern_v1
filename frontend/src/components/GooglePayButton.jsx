@@ -162,17 +162,19 @@ function GPayButton() {
   }, [getGoogleTransactionInfo]);
 
   return (
-    <GooglePayButton
-      environment="TEST"
-      buttonSizeMode="fill"
-      paymentRequest={paymentRequest}
-      onLoadPaymentData={handleLoadPaymentData}
-      onError={(error) => console.error(error)}
-      onPaymentAuthorized={onPaymentAuthorized}
-      // //   onPaymentDataChanged={(paymentData) =>
-      // //     getUpdatedPaymentData(paymentRequest, paymentData)
-      //   }
-    />
+    <div className="buttons">
+      <GooglePayButton
+        environment="TEST"
+        buttonSizeMode="fill"
+        paymentRequest={paymentRequest}
+        onLoadPaymentData={handleLoadPaymentData}
+        onError={(error) => console.error(error)}
+        onPaymentAuthorized={onPaymentAuthorized}
+        // //   onPaymentDataChanged={(paymentData) =>
+        // //     getUpdatedPaymentData(paymentRequest, paymentData)
+        //   }
+      />
+    </div>
   );
 }
 
