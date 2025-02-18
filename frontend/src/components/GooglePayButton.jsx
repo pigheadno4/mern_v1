@@ -12,6 +12,7 @@ import { clearCartItems } from "../slices/cartSlice";
 
 function GPayButton() {
   const internalId = useRef("");
+  const test = useRef();
   const dispatch = useDispatch();
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
   const [createInternalOrder] = useCreateOrderMutation();
@@ -157,8 +158,11 @@ function GPayButton() {
       paymentDataRequest.allowPaymentMethods = allowedPaymentMethods;
       paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
       paymentDataRequest.merchantInfo = merchantInfo;
+      paymentDataRequest.callbackIntents = ["PAYMENT_AUTHORIZATION"];
       console.log("paymentDataRequest", paymentDataRequest);
       setPaymentRequest(paymentDataRequest);
+      test.current = paymentDataRequest;
+      console.log("test data", test.current);
     };
     preparePaymentRequest();
   }, [getGoogleTransactionInfo]);
@@ -168,7 +172,7 @@ function GPayButton() {
       <GooglePayButton
         environment="TEST"
         buttonSizeMode="fill"
-        paymentRequest={paymentRequest}
+        paymentRequest={test.current}
         onLoadPaymentData={handleLoadPaymentData}
         onError={(error) => console.error(error)}
         onPaymentAuthorized={onPaymentAuthorized}
