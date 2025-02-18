@@ -150,7 +150,9 @@ function GPayButton() {
       const googlePayConfig = await paypal.Googlepay().config();
       console.log(googlePayConfig);
       const allowPaymentMethods = googlePayConfig.allowPaymentMethods;
+      console.log("allowPaymentMethods:", allowPaymentMethods);
       const merchantInfo = googlePayConfig.merchantInfo;
+      console.log("merchantInfo:", merchantInfo);
       const paymentRequest = { apiVersion: 2, apiVersionMinor: 0 };
       paymentRequest.allowPaymentMethods = allowPaymentMethods;
       paymentRequest.transactionInfo = getGoogleTransactionInfo();
