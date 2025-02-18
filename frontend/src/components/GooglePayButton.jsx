@@ -160,7 +160,7 @@ function GPayButton() {
       paymentDataRequest.merchantInfo = merchantInfo;
       paymentDataRequest.callbackIntents = ["PAYMENT_AUTHORIZATION"];
       console.log("paymentDataRequest", paymentDataRequest);
-      setPaymentRequest(paymentDataRequest);
+      //   setPaymentRequest(paymentDataRequest);
       test.current = paymentDataRequest;
       console.log("test data", test.current);
     };
