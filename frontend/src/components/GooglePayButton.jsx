@@ -38,9 +38,13 @@ function GPayButton() {
     return new Promise(function (resolve, reject) {
       processPayment(paymentData)
         .then(function (data) {
+          console.log("processing successful");
+          console.log(data);
           resolve({ transactionState: "SUCCESS" });
         })
         .catch(function (errDetails) {
+          console.log("processing failed");
+          console.log(errDetails);
           resolve({ transactionState: "ERROR" });
         });
     });
@@ -129,7 +133,7 @@ function GPayButton() {
         const details = await response.json();
         console.log("PayPal Capture");
         console.log(details);
-        await payOrder({ orderId: internalId.current, details }).unwrap();
+        await payOrder({ orderId: res._id, details }).unwrap();
         console.log("set order internally to pay");
         dispatch(clearCartItems());
         toast.success("Transaction completed!");
