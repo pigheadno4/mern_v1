@@ -156,7 +156,7 @@ function GPayButton() {
       const merchantInfo = googlePayConfig.merchantInfo;
       console.log("merchantInfo:", merchantInfo);
       const paymentDataRequest = { apiVersion: 2, apiVersionMinor: 0 };
-      paymentDataRequest.allowPaymentMethods = allowedPaymentMethods;
+      paymentDataRequest.allowedPaymentMethods = allowedPaymentMethods;
       paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
       paymentDataRequest.merchantInfo = merchantInfo;
       paymentDataRequest.callbackIntents = ["PAYMENT_AUTHORIZATION"];
