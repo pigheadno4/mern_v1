@@ -70,7 +70,7 @@ function GPayButton() {
       totalPrice: cart.totalPrice,
       totalPriceLabel: "Total",
     };
-  }, []);
+  }, [cart]);
   async function processPayment(paymentData) {
     try {
       const res = await createInternalOrder({
@@ -121,7 +121,7 @@ function GPayButton() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            orderID: data.orderID,
+            orderID: orderData.id,
             test: "123456",
           }),
         });
