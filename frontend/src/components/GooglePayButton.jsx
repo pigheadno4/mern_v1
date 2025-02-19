@@ -174,7 +174,7 @@ function GPayButton() {
       {loadStatus && 
       (<GooglePayButton
         environment="TEST"
-        buttonSizeMode="fill"
+        buttonSizeMode="static"
         paymentRequest={paymentRequest}
         onLoadPaymentData={handleLoadPaymentData}
        onError={(error) => console.error(error)}
