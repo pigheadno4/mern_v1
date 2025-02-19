@@ -170,7 +170,7 @@ function GPayButton() {
   }, [getGoogleTransactionInfo]);
 
   return (
-    <div className="buttons">
+    <>
       {loadStatus && 
       (<GooglePayButton
         environment="TEST"
@@ -183,7 +183,7 @@ function GPayButton() {
         // //     getUpdatedPaymentData(paymentRequest, paymentData)
         //   }
       />) }
-    </div>
+    </>
   );
 }
 
