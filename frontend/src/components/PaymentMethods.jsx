@@ -16,8 +16,8 @@ import { useDispatch } from "react-redux";
 function PaymentMethod({ setPaymentMethod, payment }) {
   const dispatch = useDispatch();
   const handleChange = (event) => {
-    setPaymentMethod(event.target.value);
     dispatch(savePaymentMethod(event.target.value));
+    setPaymentMethod(event.target.value);
   };
   return (
     <FormControl>
