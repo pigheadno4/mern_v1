@@ -19,6 +19,7 @@ function GPayButton() {
   const cart = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
   const [paymentRequest, setPaymentRequest] = useState({});
+  const [loadStatus, setLoadStatus] = useState(false);
   //   const appendGoogleSdkScript = () => {
   //     const script = document.createElement("script");
   //     script.id = "google-sdk";
@@ -161,6 +162,7 @@ function GPayButton() {
       paymentDataRequest.callbackIntents = ["PAYMENT_AUTHORIZATION"];
       console.log("paymentDataRequest", paymentDataRequest);
       setPaymentRequest(paymentDataRequest);
+      setLoadStatus(true);
       //   test.current = paymentDataRequest;
       console.log("test data", test.current);
     };
@@ -169,8 +171,8 @@ function GPayButton() {
 
   return (
     <div className="buttons">
-      {console.log(paymentRequest)}
-      {/*   <GooglePayButton
+      {loadStatus && 
+      (<GooglePayButton
         environment="TEST"
         buttonSizeMode="fill"
         paymentRequest={paymentRequest}
@@ -180,7 +182,7 @@ function GPayButton() {
         // //   onPaymentDataChanged={(paymentData) =>
         // //     getUpdatedPaymentData(paymentRequest, paymentData)
         //   }
-      /> */}
+      />) }
     </div>
   );
 }
