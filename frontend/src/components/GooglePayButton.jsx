@@ -127,8 +127,10 @@ function GPayButton() {
         });
 
         const details = await response.json();
+        console.log("PayPal Capture");
         console.log(details);
         await payOrder({ orderId: internalId.current, details }).unwrap();
+        console.log("set order internally to pay");
         dispatch(clearCartItems());
         toast.success("Transaction completed!");
         return { transactionState: "SUCCESS" };
