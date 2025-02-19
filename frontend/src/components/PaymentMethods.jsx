@@ -10,10 +10,14 @@ import card from "../../public/images/credit-card.svg";
 import googlepay from "../../public/images/google-pay.svg";
 import applepay from "../../public/images/apple-pay.svg";
 import venmo from "../../public/images/venmo.svg";
+import { savePaymentMethod } from "../slices/cartSlice";
+import { useDispatch } from "react-redux";
 
 function PaymentMethod({ setPaymentMethod, payment }) {
+  const dispatch = useDispatch();
   const handleChange = (event) => {
     setPaymentMethod(event.target.value);
+    dispatch(savePaymentMethod(event.target.value));
   };
   return (
     <FormControl>
