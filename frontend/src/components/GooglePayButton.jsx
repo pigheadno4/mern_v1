@@ -169,6 +169,7 @@ function GPayButton() {
 
   return (
     <div className="buttons">
+      {console.log(paymentRequest)}
       <GooglePayButton
         environment="TEST"
         buttonSizeMode="fill"
