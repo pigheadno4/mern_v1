@@ -179,7 +179,7 @@ function GPayButton() {
           onLoadPaymentData={handleLoadPaymentData}
           onError={(error) => console.error(error)}
           onPaymentAuthorized={onPaymentAuthorized}
-          // style="width: 100%"
+          style={{ width: "100%" }}
           // //   onPaymentDataChanged={(paymentData) =>
           // //     getUpdatedPaymentData(paymentRequest, paymentData)
           //   }
