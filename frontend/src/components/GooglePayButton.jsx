@@ -170,17 +170,17 @@ function GPayButton() {
   return (
     <div className="buttons">
       {console.log(paymentRequest)}
-      <GooglePayButton
-        environment="TEST"
-        buttonSizeMode="fill"
-        paymentRequest={paymentRequest}
-        onLoadPaymentData={handleLoadPaymentData}
-        onError={(error) => console.error(error)}
-        onPaymentAuthorized={onPaymentAuthorized}
+ //     <GooglePayButton
+  //      environment="TEST"
+  //      buttonSizeMode="fill"
+ //       paymentRequest={paymentRequest}
+  //      onLoadPaymentData={handleLoadPaymentData}
+  //      onError={(error) => console.error(error)}
+ //       onPaymentAuthorized={onPaymentAuthorized}
         // //   onPaymentDataChanged={(paymentData) =>
         // //     getUpdatedPaymentData(paymentRequest, paymentData)
         //   }
-      />
+   //   />
     </div>
   );
 }
