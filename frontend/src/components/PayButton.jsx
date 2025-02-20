@@ -3,7 +3,7 @@ import ACDCButton from "./ACDCButton";
 import GPayButton from "./GooglePayButton";
 import { usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { useExternalScript } from "../utils/useExternalScript.js";
-import { APayButton } from "./AppleButton.jsx";
+import APayButton from "./AppleButton.jsx";
 
 // import GooglePayButton from "./GooglePayButton";
 
