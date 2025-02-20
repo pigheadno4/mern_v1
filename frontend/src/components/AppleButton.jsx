@@ -109,6 +109,16 @@ function APayButton() {
         document.getElementById("btn-appl").addEventListener("click", onClick);
       }
       setAppleConfig(applePayConfig);
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // eslint-disable-next-line no-undef
+        if (
+          ApplePaySession?.supportsVersion(4) &&
+          ApplePaySession?.canMakePayments()
+        ) {
+          setupApplepay().catch(console.error);
+        }
+      });
     };
     preparePaymentRequest();
   }, []);
