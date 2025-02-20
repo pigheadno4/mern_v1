@@ -20,7 +20,8 @@ function CheckoutScreen() {
   // const [checkoutStage, setCheckoutStage] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("PAYPAL");
   const [show, setShow] = useState(false);
-  const [{ isResolved }, paypalDispatch] = usePayPalScriptReducer();
+  const [{ isResolved, isPending, isRejected, isLoading }, paypalDispatch] =
+    usePayPalScriptReducer();
   const {
     data: paypal,
     isLoading: loadingPayPal,
@@ -181,7 +182,7 @@ function CheckoutScreen() {
                 </Button> */}
 
                 {isResolved && <PayButton paymentMethod={paymentMethod} />}
-                {/* {isLoading && <Loader />} */}
+                {isLoading && <Loader />}
               </ListGroup.Item>
             </ListGroup>
           </Card>

@@ -19,6 +19,7 @@ function GPayButton() {
   const cart = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
   const [paymentRequest, setPaymentRequest] = useState({});
+  const [loadStatus, setLoadStatus] = useState(false);
   //   const appendGoogleSdkScript = () => {
   //     const script = document.createElement("script");
   //     script.id = "google-sdk";
@@ -37,9 +38,13 @@ function GPayButton() {
     return new Promise(function (resolve, reject) {
       processPayment(paymentData)
         .then(function (data) {
+          console.log("processing successful");
+          console.log(data);
           resolve({ transactionState: "SUCCESS" });
         })
         .catch(function (errDetails) {
+          console.log("processing failed");
+          console.log(errDetails);
           resolve({ transactionState: "ERROR" });
         });
     });
@@ -69,7 +74,7 @@ function GPayButton() {
       totalPrice: cart.totalPrice,
       totalPriceLabel: "Total",
     };
-  }, []);
+  }, [cart]);
   async function processPayment(paymentData) {
     try {
       const res = await createInternalOrder({
@@ -120,14 +125,16 @@ function GPayButton() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            orderID: data.orderID,
+            orderID: orderData.id,
             test: "123456",
           }),
         });
 
         const details = await response.json();
+        console.log("PayPal Capture");
         console.log(details);
-        await payOrder({ orderId: internalId.current, details }).unwrap();
+        await payOrder({ orderId: res._id, details }).unwrap();
+        console.log("set order internally to pay");
         dispatch(clearCartItems());
         toast.success("Transaction completed!");
         return { transactionState: "SUCCESS" };
@@ -155,12 +162,13 @@ function GPayButton() {
       const merchantInfo = googlePayConfig.merchantInfo;
       console.log("merchantInfo:", merchantInfo);
       const paymentDataRequest = { apiVersion: 2, apiVersionMinor: 0 };
-      paymentDataRequest.allowPaymentMethods = allowedPaymentMethods;
+      paymentDataRequest.allowedPaymentMethods = allowedPaymentMethods;
       paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
       paymentDataRequest.merchantInfo = merchantInfo;
       paymentDataRequest.callbackIntents = ["PAYMENT_AUTHORIZATION"];
       console.log("paymentDataRequest", paymentDataRequest);
       setPaymentRequest(paymentDataRequest);
+      setLoadStatus(true);
       //   test.current = paymentDataRequest;
       console.log("test data", test.current);
     };
@@ -168,19 +176,22 @@ function GPayButton() {
   }, [getGoogleTransactionInfo]);
 
   return (
-    <div className="buttons">
-      <GooglePayButton
-        environment="TEST"
-        buttonSizeMode="fill"
-        paymentRequest={paymentRequest}
-        onLoadPaymentData={handleLoadPaymentData}
-        onError={(error) => console.error(error)}
-        onPaymentAuthorized={onPaymentAuthorized}
-        // //   onPaymentDataChanged={(paymentData) =>
-        // //     getUpdatedPaymentData(paymentRequest, paymentData)
-        //   }
-      />
-    </div>
+    <>
+      {loadStatus && (
+        <GooglePayButton
+          environment="TEST"
+          buttonSizeMode="fill"
+          paymentRequest={paymentRequest}
+          onLoadPaymentData={handleLoadPaymentData}
+          onError={(error) => console.error(error)}
+          onPaymentAuthorized={onPaymentAuthorized}
+          style={{ width: "100%" }}
+          // //   onPaymentDataChanged={(paymentData) =>
+          // //     getUpdatedPaymentData(paymentRequest, paymentData)
+          //   }
+        />
+      )}
+    </>
   );
 }
 
