@@ -45,7 +45,12 @@ function PayButton({ paymentMethod }) {
             <PayPalButton paymentMethod={"VENMO"} />
           </div>
           <div hidden={paymentMethod === "APPLE" ? false : true}>
-            {appleJSLoadingStatus === "ready" && <APayButton />}
+            {appleJSLoadingStatus === "ready" &&
+            ApplePaySession.canMakePayments ? (
+              <APayButton />
+            ) : (
+              <p>Your Device cannot support Apple Pay</p>
+            )}
           </div>
           <div hidden={paymentMethod === "GOOGLE" ? false : true}>
             <GPayButton />
