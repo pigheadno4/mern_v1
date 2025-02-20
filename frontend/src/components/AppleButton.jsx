@@ -180,6 +180,7 @@ function APayButton() {
   useEffect(() => {
     const preparePaymentRequest = async () => {
       const applePayConfig = await paypal.Applepay().config();
+      applepay = paypal.Applepay();
       console.log("Apple Config:", applePayConfig);
       if (applePayConfig.isEligible) {
         document.getElementById("applepay-container").innerHTML =
