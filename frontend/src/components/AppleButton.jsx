@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const APayButton = () => {
+function APayButton() {
   useEffect(() => {
     const preparePaymentRequest = async () => {
       const applePayConfig = await paypal.Applepay().config();
@@ -13,6 +13,6 @@ const APayButton = () => {
   }, []);
 
   return <div id="applepay-container"></div>;
-};
+}
 
 export default APayButton;
