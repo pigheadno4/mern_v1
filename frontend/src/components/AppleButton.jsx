@@ -13,6 +13,7 @@ function APayButton() {
   const dispatch = useDispatch();
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
   const [createInternalOrder] = useCreateOrderMutation();
+  const [applepay, setApplepay] = useState();
 
   async function onClick(applePayConfig) {
     const {
@@ -180,7 +181,7 @@ function APayButton() {
   useEffect(() => {
     const preparePaymentRequest = async () => {
       const applePayConfig = await paypal.Applepay().config();
-      applepay = paypal.Applepay();
+      setApplepay(paypal.Applepay());
       console.log("Apple Config:", applePayConfig);
       if (applePayConfig.isEligible) {
         document.getElementById("applepay-container").innerHTML =
