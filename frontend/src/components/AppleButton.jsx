@@ -102,6 +102,7 @@ function APayButton() {
   useEffect(() => {
     const preparePaymentRequest = async () => {
       const applePayConfig = await paypal.Applepay().config();
+      console.log(applePayConfig);
       if (applePayConfig.isEligible) {
         document.getElementById("applepay-container").innerHTML =
           '<apple-pay-button id="btn-appl" buttonstyle="black" type="buy" locale="en">';
