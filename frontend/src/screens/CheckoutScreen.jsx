@@ -39,7 +39,7 @@ function CheckoutScreen() {
             buyerCountry: "US",
             locale: "en_US",
             enableFunding: "venmo",
-            components: ["buttons", "card-fields", "googlepay"],
+            components: ["buttons", "card-fields", "googlepay", "applepay"],
           },
         });
         paypalDispatch({
