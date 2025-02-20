@@ -1,5 +1,5 @@
 import GooglePayButton from "@google-pay/button-react";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   useCreateOrderMutation,
   usePayOrderMutation,
@@ -11,8 +11,6 @@ import { PAYPAL_API_URL } from "../constants";
 import { clearCartItems } from "../slices/cartSlice";
 
 function GPayButton() {
-  const internalId = useRef("");
-  const test = useRef();
   const dispatch = useDispatch();
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
   const [createInternalOrder] = useCreateOrderMutation();
@@ -86,7 +84,6 @@ function GPayButton() {
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
       }).unwrap();
-      internalId.current = res._id;
       //   SetSysOrderId(res._id);
       //   refetch();
       //   sysOrderId = res._id;
@@ -169,8 +166,6 @@ function GPayButton() {
       console.log("paymentDataRequest", paymentDataRequest);
       setPaymentRequest(paymentDataRequest);
       setLoadStatus(true);
-      //   test.current = paymentDataRequest;
-      console.log("test data", test.current);
     };
     preparePaymentRequest();
   }, [getGoogleTransactionInfo]);

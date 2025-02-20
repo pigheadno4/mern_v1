@@ -1,7 +1,18 @@
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import {
+  useCreateOrderMutation,
+  usePayOrderMutation,
+} from "../slices/ordersApiSlice";
 
 function APayButton() {
-  const [appleConfig, setAppleConfig] = useState({});
+  // const [appleConfig, setAppleConfig] = useState({});
+  const cart = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+  const [createInternalOrder] = useCreateOrderMutation();
 
   async function onClick(applePayConfig) {
     const {
@@ -19,10 +30,32 @@ function APayButton() {
       merchantCapabilities,
       supportedNetworks,
       requiredBillingContactFields: ["name", "phone", "email", "postalAddress"],
-      requiredShippingContactFields: [],
+      requiredShippingContactFields: [
+        "name",
+        "phone",
+        "email",
+        "postalAddress",
+      ],
+      lineItems: [
+        {
+          label: "Item Subtotal",
+          type: "final",
+          amount: cart.itemsPrice,
+        },
+        {
+          label: "Shipping Price",
+          amount: cart.shippingPrice,
+          type: "final",
+        },
+        {
+          label: "Estimated Tax",
+          amount: cart.taxPrice,
+          type: "final",
+        },
+      ],
       total: {
         label: "Demo (Card is not charged)",
-        amount: "10.00",
+        amount: cart.totalPrice,
         type: "final",
       },
     };
@@ -31,11 +64,17 @@ function APayButton() {
     let session = new ApplePaySession(4, paymentRequest);
 
     session.onvalidatemerchant = (event) => {
+      console.log("in onvalidatemerchant print event");
+      console.log(event);
       applepay
         .validateMerchant({
           validationUrl: event.validationURL,
         })
         .then((payload) => {
+          console.log(
+            "in onvalidatemerchant after validateMerchant print payload"
+          );
+          console.log(payload);
           session.completeMerchantValidation(payload.merchantSession);
         })
         .catch((err) => {
@@ -49,38 +88,77 @@ function APayButton() {
         newTotal: paymentRequest.total,
       });
     };
-
     session.onpaymentauthorized = async (event) => {
+      console.log("in onpaymentauthorized print event");
+      console.log(event);
       try {
-        /* Create Order on the Server Side */
-        const orderResponse = await fetch(`/api/orders`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+        // Create Internal Order
+        const res = await createInternalOrder({
+          orderItems: cart.cartItems,
+          shippingAddress: cart.shippingAddress,
+          paymentMethod: cart.paymentMethod,
+          itemsPrice: cart.itemsPrice,
+          shippingPrice: cart.shippingPrice,
+          taxPrice: cart.taxPrice,
+          totalPrice: cart.totalPrice,
+        }).unwrap();
+        console.log("internal create order resp: ", res);
+        const data = {
+          ...res,
+          user: {
+            _id: userInfo._id,
+            name: userInfo.name,
+            email: userInfo.email,
           },
+        };
+        console.log("create paypal order data: ", data);
+        /* Create Order on the Server Side */
+        const response = await fetch(`${PAYPAL_API_URL}/create-paypal-order`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order: data }),
         });
-        if (!orderResponse.ok) {
+
+        if (!response.ok) {
           throw new Error("error creating order");
         }
-
-        const { id } = await orderResponse.json();
-        console.log({ id });
+        const orderData = await response.json();
+        console.log(orderData.id);
         /**
          * Confirm Payment
          */
-        await applepay.confirmOrder({
+        const confirmResp = await applepay.confirmOrder({
           orderId: id,
           token: event.payment.token,
           billingContact: event.payment.billingContact,
           shippingContact: event.payment.shippingContact,
         });
-
+        console.log("confirm apple order resp:", confirmResp);
         /*
          * Capture order (must currently be made on server)
          */
-        await fetch(`/api/orders/${id}/capture`, {
-          method: "POST",
-        });
+        const CaptureResp = await fetch(
+          `${PAYPAL_API_URL}/capture-paypal-order`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderID: orderData.id,
+              test: "123456",
+            }),
+          }
+        );
+        // await fetch(`/api/orders/${id}/capture`, {
+        //   method: "POST",
+        // });
+        const details = await CaptureResp.json();
+        console.log("PayPal Capture");
+        console.log(details);
+
+        await payOrder({ orderId: res._id, details }).unwrap();
+        console.log("set order internally to pay");
+        dispatch(clearCartItems());
+        toast.success("Transaction completed!");
 
         session.completePayment({
           status: window.ApplePaySession.STATUS_SUCCESS,
@@ -105,12 +183,12 @@ function APayButton() {
       console.log("Apple Config:", applePayConfig);
       if (applePayConfig.isEligible) {
         document.getElementById("applepay-container").innerHTML =
-          '<apple-pay-button id="btn-appl" buttonstyle="black" type="buy" locale="en">';
+          '<apple-pay-button id="btn-appl" buttonstyle="black" type="buy" locale="en" style="width: 100%">';
         document
           .getElementById("btn-appl")
           .addEventListener("click", () => onClick(applePayConfig));
       }
-      setAppleConfig(applePayConfig);
+      // setAppleConfig(applePayConfig);
     };
     preparePaymentRequest();
   }, []);
