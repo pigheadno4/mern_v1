@@ -5,6 +5,8 @@ import {
   useCreateOrderMutation,
   usePayOrderMutation,
 } from "../slices/ordersApiSlice";
+import { PAYPAL_API_URL } from "../constants";
+import { clearCartItems } from "../slices/cartSlice";
 
 function APayButton() {
   // const [appleConfig, setAppleConfig] = useState({});
