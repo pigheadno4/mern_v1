@@ -46,7 +46,7 @@ function PayButton({ paymentMethod }) {
           </div>
           <div hidden={paymentMethod === "APPLE" ? false : true}>
             {appleJSLoadingStatus === "ready" &&
-            ApplePaySession.canMakePayments ? (
+            ApplePaySession?.canMakePayments ? (
               <APayButton />
             ) : (
               <p>Your Device cannot support Apple Pay</p>
