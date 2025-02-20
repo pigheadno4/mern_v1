@@ -3,14 +3,14 @@ import { useState, useEffect } from "react";
 function APayButton() {
   const [appleConfig, setAppleConfig] = useState({});
 
-  async function onClick() {
+  async function onClick(applePayConfig) {
     const {
       isEligible,
       countryCode,
       currencyCode,
       merchantCapabilities,
       supportedNetworks,
-    } = appleConfig;
+    } = applePayConfig;
     console.log({ merchantCapabilities, currencyCode, supportedNetworks });
 
     const paymentRequest = {
@@ -26,7 +26,7 @@ function APayButton() {
         type: "final",
       },
     };
-
+    console.log("Apple Payment Request:", paymentRequest);
     // eslint-disable-next-line no-undef
     let session = new ApplePaySession(4, paymentRequest);
 
@@ -106,19 +106,11 @@ function APayButton() {
       if (applePayConfig.isEligible) {
         document.getElementById("applepay-container").innerHTML =
           '<apple-pay-button id="btn-appl" buttonstyle="black" type="buy" locale="en">';
-        document.getElementById("btn-appl").addEventListener("click", onClick);
+        document
+          .getElementById("btn-appl")
+          .addEventListener("click", () => onClick(applePayConfig));
       }
       setAppleConfig(applePayConfig);
-
-      document.addEventListener("DOMContentLoaded", () => {
-        // eslint-disable-next-line no-undef
-        if (
-          ApplePaySession?.supportsVersion(4) &&
-          ApplePaySession?.canMakePayments()
-        ) {
-          setupApplepay().catch(console.error);
-        }
-      });
     };
     preparePaymentRequest();
   }, []);
