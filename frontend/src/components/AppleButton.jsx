@@ -13,9 +13,9 @@ function APayButton() {
   const dispatch = useDispatch();
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
   const [createInternalOrder] = useCreateOrderMutation();
-  const [applepay, setApplepay] = useState();
+  // const [applepay, setApplepay] = useState();
 
-  async function onClick(applePayConfig) {
+  async function onClick(applePayConfig, applepay) {
     const {
       isEligible,
       countryCode,
@@ -181,14 +181,16 @@ function APayButton() {
   useEffect(() => {
     const preparePaymentRequest = async () => {
       const applePayConfig = await paypal.Applepay().config();
-      setApplepay(paypal.Applepay());
+      // setApplepay();
       console.log("Apple Config:", applePayConfig);
       if (applePayConfig.isEligible) {
         document.getElementById("applepay-container").innerHTML =
           '<apple-pay-button id="btn-appl" buttonstyle="black" type="buy" locale="en" style="width: 100%">';
         document
           .getElementById("btn-appl")
-          .addEventListener("click", () => onClick(applePayConfig));
+          .addEventListener("click", () =>
+            onClick(applePayConfig, paypal.Applepay())
+          );
       }
       // setAppleConfig(applePayConfig);
     };
