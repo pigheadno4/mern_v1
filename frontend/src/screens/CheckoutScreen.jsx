@@ -37,9 +37,9 @@ function CheckoutScreen() {
             "client-id": paypal.clientId,
             currency: "USD",
             buyerCountry: "US",
+            merchantId: "DDWAX7MLZJHDC",
             locale: "en_US",
             enableFunding: "venmo",
-            merchantId: "DDWAX7MLZJHDC",
             components: ["buttons", "card-fields", "googlepay", "applepay"],
           },
         });
