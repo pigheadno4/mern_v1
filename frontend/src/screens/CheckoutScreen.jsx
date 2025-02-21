@@ -39,6 +39,7 @@ function CheckoutScreen() {
             buyerCountry: "US",
             locale: "en_US",
             enableFunding: "venmo",
+            merchantId: "DDWAX7MLZJHDC",
             components: ["buttons", "card-fields", "googlepay", "applepay"],
           },
         });
