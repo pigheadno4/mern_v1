@@ -1,10 +1,8 @@
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { useState } from "react";
 import {
-  useGetPayPalClientIdQuery,
   useCreateOrderMutation,
   usePayOrderMutation,
-  //   useGetOrderDetailsQuery,
 } from "../slices/ordersApiSlice";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,7 +35,8 @@ function PayPalButton({ paymentMethod }) {
       // Store system order data in DB before create PayPal order
       const res = await createInternalOrder({
         orderItems: cart.cartItems,
-        shippingAddress: cart.shippingAddress,
+        shippingAddress: cart.shippingAddress._id,
+        billingAddress: cart.billingAddress._id,
         paymentMethod: cart.paymentMethod,
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
@@ -53,6 +52,8 @@ function PayPalButton({ paymentMethod }) {
       console.log(res);
       const data = {
         ...res,
+        shippingAddress: cart.shippingAddress,
+        billingAddress: cart.billingAddress,
         user: {
           _id: userInfo._id,
           name: userInfo.name,

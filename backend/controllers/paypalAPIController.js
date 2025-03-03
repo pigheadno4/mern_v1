@@ -7,7 +7,7 @@ const createOrder = asyncHandler(async (req, res) => {
   //   console.log(PayPal_Request_Id);
   //   console.log(url);
   //   console.log(accessToken);
-  console.log(req.body);
+  // console.log("PayPal Create Order Request Body: ", req.body);
   const items = req.body.order.orderItems.map((x, index) => ({
     name: x.name,
     // sku: x.brand,
@@ -18,8 +18,9 @@ const createOrder = asyncHandler(async (req, res) => {
       value: x.price,
     },
   }));
-  console.log(req.body.order.orderItems);
-  console.log(items);
+  // console.log(req.body.order.orderItems);
+  // console.log(items);
+  // console.log("billing : ", req.body.order.billingAddress);
 
   const response = await fetch(url, {
     method: "POST",
@@ -40,22 +41,19 @@ const createOrder = asyncHandler(async (req, res) => {
             cancel_url: "https://example.com/cancelUrl",
           },
           email_address: req.body.order.user.email,
-          name: {
-            given_name: req.body.order.user.name,
-            surname: req.body.order.user.name,
-          },
+          name: req.body.order.billingAddress.name,
           address: {
-            address_line_1: req.body.order.shippingAddress.address,
-            address_line_2: "",
-            admin_area_2: req.body.order.shippingAddress.city,
-            admin_area_1: "DC",
-            postal_code: req.body.order.shippingAddress.postalCode,
-            country_code: "US",
+            address_line_1: req.body.order.billingAddress.address_line_1,
+            address_line_2: req.body.order.billingAddress.address_line_2,
+            admin_area_2: req.body.order.billingAddress.admin_area_2,
+            admin_area_1: req.body.order.billingAddress.admin_area_1,
+            postal_code: req.body.order.billingAddress.postal_code,
+            country_code: req.body.order.billingAddress.country_code,
           },
           phone: {
             phone_type: "MOBILE",
             phone_number: {
-              national_number: "1429876354",
+              national_number: req.body.order.billingAddress.phone_number,
             },
           },
         },
@@ -87,15 +85,15 @@ const createOrder = asyncHandler(async (req, res) => {
           items: items,
           shipping: {
             name: {
-              full_name: req.body.order.user.name,
+              full_name: req.body.order.shippingAddress.name.surname,
             },
             address: {
-              address_line_1: req.body.order.shippingAddress.address,
-              address_line_2: "",
-              admin_area_2: req.body.order.shippingAddress.city,
-              admin_area_1: "DC",
-              postal_code: req.body.order.shippingAddress.postalCode,
-              country_code: "US",
+              address_line_1: req.body.order.shippingAddress.address_line_1,
+              address_line_2: req.body.order.shippingAddress.address_line_2,
+              admin_area_2: req.body.order.shippingAddress.admin_area_2,
+              admin_area_1: req.body.order.shippingAddress.admin_area_1,
+              postal_code: req.body.order.shippingAddress.postal_code,
+              country_code: req.body.order.shippingAddress.country_code,
             },
           },
         },
@@ -125,4 +123,29 @@ const captureOrder = asyncHandler(async (req, res) => {
   res.json(resp);
 });
 
-export { createOrder, captureOrder };
+const getAccessTokenVault = asyncHandler(async (req, res) => {
+  const params = {
+    grant_type: "client_credentials",
+    response_type: "id_token",
+  };
+  // pass the url encoded value as the body of the post call
+  const urlEncodedParams = new URLSearchParams(params).toString();
+
+  const auth = Buffer.from(
+    process.env.PAYPAL_CLIENT_ID + ":" + process.env.PAYPAL_SECRET
+  ).toString("base64");
+  const response = await fetch(`${process.env.PAYPAL_BASE}/v1/oauth2/token`, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${auth}`,
+    },
+    body: urlEncodedParams,
+  });
+  const jsonData = await response.json();
+  req.accessToken = jsonData.access_token;
+
+  // console.log(response.body);
+  res.status(200).json(jsonData);
+});
+
+export { createOrder, captureOrder, getAccessTokenVault };

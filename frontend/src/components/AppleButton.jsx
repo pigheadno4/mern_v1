@@ -98,7 +98,8 @@ function APayButton() {
         // Create Internal Order
         const res = await createInternalOrder({
           orderItems: cart.cartItems,
-          shippingAddress: cart.shippingAddress,
+          shippingAddress: cart.shippingAddress._id,
+          billingAddress: cart.billingAddress._id,
           paymentMethod: cart.paymentMethod,
           itemsPrice: cart.itemsPrice,
           shippingPrice: cart.shippingPrice,
@@ -108,6 +109,8 @@ function APayButton() {
         console.log("internal create order resp: ", res);
         const data = {
           ...res,
+          shippingAddress: cart.shippingAddress,
+          billingAddress: cart.billingAddress,
           user: {
             _id: userInfo._id,
             name: userInfo.name,

@@ -3,19 +3,40 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { FaPlus, FaEdit } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+
 import PayButton from "../components/PayButton";
-import { Button, Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
 import ShippingAddressModal from "../components/ShippingAddressModal";
 import PaymentMethod from "../components/PaymentMethods";
 import { usePayPalScriptReducer } from "@paypal/react-paypal-js";
-
+import {
+  useGetDefaultShippingQuery,
+  useGetDefaultBillingQuery,
+} from "../slices/addressApiSlice";
+import Grid from "@mui/material/Grid2";
+import AddressCard from "../components/AddressCard";
+import { Typography } from "@mui/material";
 import { useGetPayPalClientIdQuery } from "../slices/ordersApiSlice";
+import { saveBillingAddress, saveShippingAddress } from "../slices/cartSlice";
+
+import AddressListModal from "../components/AddressListModal";
 
 function CheckoutScreen() {
   // const navigate = useNavigate();
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+  const {
+    data: defaultShippingAddress,
+    isSuccess: loadedDS,
+    refetch: DSRefetch,
+  } = useGetDefaultShippingQuery();
+  const {
+    data: defaultBillingAddress,
+    isSuccess: loadedDB,
+    refetch: DBRefetch,
+  } = useGetDefaultBillingQuery();
+
   // const user = useSelector((state) => state.auth);
   // const [checkoutStage, setCheckoutStage] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("PAYPAL");
@@ -54,6 +75,19 @@ function CheckoutScreen() {
     }
   }, [paypal, paypalDispatch, loadingPayPal, errorPayPal]);
 
+  useEffect(() => {
+    if (loadedDS && loadedDB) {
+      dispatch(saveShippingAddress(defaultShippingAddress));
+      dispatch(saveBillingAddress(defaultBillingAddress));
+    }
+  }, [
+    loadedDS,
+    defaultShippingAddress,
+    dispatch,
+    defaultBillingAddress,
+    loadedDB,
+  ]);
+
   console.log(paymentMethod);
   return (
     <>
@@ -61,33 +95,52 @@ function CheckoutScreen() {
         <Col md={8}>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>Shipping</h2>
-              {cart.shippingAddress ? (
-                <div>
-                  <strong>Address:</strong> {cart.shippingAddress.address},{" "}
-                  {cart.shippingAddress.city} {cart.shippingAddress.postalCode},{" "}
-                  {cart.shippingAddress.country}
-                  <Button
-                    variant="light"
-                    className="btn-sm mx-2"
-                    onClick={() => setShow(true)}
-                  >
-                    <FaEdit />
-                  </Button>
-                </div>
-              ) : (
-                <div>
-                  <Button variant="primary" onClick={() => setShow(true)}>
-                    <FaPlus />
-                    Add Shipping Address
-                  </Button>
-                </div>
-              )}
-              {/* <p>
-              <strong>Address:</strong> {cart.shippingAddress.address},{" "}
-              {cart.shippingAddress.city} {cart.shippingAddress.postalCode},{" "}
-              {cart.shippingAddress.country}
-            </p> */}
+              <Grid container spacing={1} justifyContent="space-between">
+                <Grid
+                  container
+                  spacing={1}
+                  justifyContent="flex-start"
+                  size={6}
+                >
+                  <Grid size={9}>
+                    <Typography variant="h5">Shipping</Typography>
+                  </Grid>
+                  <Grid size={2}>
+                    <AddressListModal isShipping={true} />
+                    {/* {loadedDS && `${defaultShippingAddress._id}`} */}
+                  </Grid>
+                  <Grid size={12}>
+                    {loadedDS && (
+                      <AddressCard
+                        address={defaultShippingAddress}
+                        isShipping={true}
+                      />
+                    )}
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  spacing={1}
+                  justifyContent="flex-start"
+                  size={6}
+                >
+                  <Grid size={9}>
+                    <Typography variant="h5">Billing</Typography>
+                  </Grid>
+                  <Grid size={2}>
+                    <AddressListModal isShipping={false} />
+                    {/* {loadedDS && `${defaultShippingAddress._id}`} */}
+                  </Grid>
+                  <Grid size={12}>
+                    {loadedDB && (
+                      <AddressCard
+                        address={defaultBillingAddress}
+                        isShipping={false}
+                      />
+                    )}
+                  </Grid>
+                </Grid>
+              </Grid>
             </ListGroup.Item>
             <ListGroup.Item>
               <h2>Order Items</h2>
@@ -189,7 +242,11 @@ function CheckoutScreen() {
           </Card>
         </Col>
       </Row>
-      <ShippingAddressModal show={show} onHide={() => setShow(false)} />
+      <ShippingAddressModal
+        show={show}
+        onHide={() => setShow(false)}
+        refetch={DSRefetch}
+      />
     </>
   );
 }

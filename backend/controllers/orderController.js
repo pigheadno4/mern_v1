@@ -9,6 +9,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
   const {
     orderItems,
     shippingAddress,
+    billingAddress,
     paymentMethod,
     itemsPrice,
     taxPrice,
@@ -27,6 +28,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
       })),
       user: req.user._id,
       shippingAddress,
+      billingAddress,
       paymentMethod,
       itemsPrice,
       taxPrice,
@@ -52,10 +54,16 @@ const getMyOrders = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/:id
 // @access  Private
 const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id).populate(
-    "user",
-    "name email"
-  );
+  const order = await Order.findById(req.params.id)
+    .populate("user", "name email")
+    .populate(
+      "shippingAddress",
+      "address_line_1 address_line_2 admin_area_1 admin_area_2 postal_code country_code phone_number"
+    )
+    .populate(
+      "billingAddress",
+      "address_line_1 address_line_2 admin_area_1 admin_area_2 postal_code country_code phone_number"
+    );
 
   if (order) {
     res.status(200).json(order);

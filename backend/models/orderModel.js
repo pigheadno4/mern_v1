@@ -21,11 +21,15 @@ const orderSchema = mongoose.Schema(
       },
     ],
     shippingAddress: {
-      address: { type: String, required: true },
-      city: { type: String, required: true },
-      postalCode: { type: String, required: true },
-      country: { type: String, required: true },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Address",
     },
+    // add billing address
+    billingAddress: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Address",
+    },
+    //----------------------------------------------
     paymentMethod: {
       type: String,
       required: true,

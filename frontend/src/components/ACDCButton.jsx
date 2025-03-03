@@ -34,7 +34,8 @@ function ACDCButton() {
       // Store system order data in DB before create PayPal order
       const res = await createInternalOrder({
         orderItems: cart.cartItems,
-        shippingAddress: cart.shippingAddress,
+        shippingAddress: cart.shippingAddress._id,
+        billingAddress: cart.billingAddress._id,
         paymentMethod: cart.paymentMethod,
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
@@ -51,6 +52,8 @@ function ACDCButton() {
       console.log(res);
       const data = {
         ...res,
+        shippingAddress: cart.shippingAddress,
+        billingAddress: cart.billingAddress,
         user: {
           _id: userInfo._id,
           name: userInfo.name,

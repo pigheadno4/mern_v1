@@ -4,12 +4,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Divider from "@mui/material/Divider";
-import paypal from "../../public/images/paypal-144.svg";
-import paylater from "../../public/images/pay-later-144.svg";
-import card from "../../public/images/credit-card.svg";
-import googlepay from "../../public/images/google-pay.svg";
-import applepay from "../../public/images/apple-pay.svg";
-import venmo from "../../public/images/venmo.svg";
+import paypal from "../../src/images/paypal-144.svg";
+import paylater from "../../src/images/pay-later-144.svg";
+import card from "../../src/images/credit-card.svg";
+import googlepay from "../../src/images/google-pay.svg";
+import applepay from "../../src/images/apple-pay.svg";
+import venmo from "../../src/images/venmo.svg";
 import { savePaymentMethod } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
 

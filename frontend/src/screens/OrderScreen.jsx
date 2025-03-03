@@ -150,9 +150,14 @@ function OrderScreen() {
                 <strong>Email: </strong> {order.user.email}
               </p>
               <p>
-                <strong>Address: </strong> {order.shippingAddress.address},{" "}
-                {order.shippingAddress.city}, {order.shippingAddress.postalCode}
-                , {order.shippingAddress.country}
+                <strong>Address: </strong>{" "}
+                {order.shippingAddress.address_line_1}{" "}
+                {order.shippingAddress.address_line_2},{" "}
+                {order.shippingAddress.admin_area_1}{" "}
+                {order.shippingAddress.admin_area_2},{" "}
+                {order.shippingAddress.postal_code},{" "}
+                {order.shippingAddress.country_code} ,{" "}
+                {order.shippingAddress.phone_number}
               </p>
               {order.isDelivered ? (
                 <Message variant="success">
