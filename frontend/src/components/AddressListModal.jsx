@@ -150,7 +150,11 @@ function AddressListModal({ isShipping }) {
                       </CardContent>
                     </CardActionArea>
                     <CardActions>
-                      <AddressEditModal address={address} mode="Update" />
+                      <AddressEditModal
+                        address={address}
+                        mode="Update"
+                        isShipping={isShip}
+                      />
                     </CardActions>
                   </Card>
                 </Grid>
@@ -170,7 +174,7 @@ function AddressListModal({ isShipping }) {
                     {/* <Fab variant="circular" size="small"> */}
                     <Button>
                       {/* <AddIcon fontSize="small" /> */}
-                      <AddressEditModal />
+                      <AddressEditModal isShipping={isShip} />
                     </Button>
                     {/* </Fab> */}
                   </CardActions>

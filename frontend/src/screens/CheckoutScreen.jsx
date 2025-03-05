@@ -19,13 +19,15 @@ import AddressCard from "../components/AddressCard";
 import { Typography } from "@mui/material";
 import { useGetPayPalClientIdQuery } from "../slices/ordersApiSlice";
 import { saveBillingAddress, saveShippingAddress } from "../slices/cartSlice";
-
+import { PAYPAL_API_URL } from "../constants";
 import AddressListModal from "../components/AddressListModal";
 
 function CheckoutScreen() {
   // const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.auth);
+
   const {
     data: defaultShippingAddress,
     isSuccess: loadedDS,
@@ -52,6 +54,21 @@ function CheckoutScreen() {
   useEffect(() => {
     if (!errorPayPal && !loadingPayPal && paypal.clientId) {
       const loadPayPalScript = async () => {
+        let param = {};
+        // console.log("userinfo", userInfo);
+        if (cart.vault) {
+          param = {
+            target_customer_id: userInfo.customer_id,
+          };
+        }
+        console.log("param: ", param);
+        const resp = await fetch(`${PAYPAL_API_URL}/get-access-token-vault`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(param),
+        });
+        const respData = await resp.json();
+        console.log("access resp: ", respData.id_token);
         paypalDispatch({
           type: "resetOptions",
           value: {
@@ -60,6 +77,7 @@ function CheckoutScreen() {
             buyerCountry: "US",
             merchantId: "DDWAX7MLZJHDC",
             locale: "en_US",
+            dataUserIdToken: respData.id_token,
             enableFunding: "venmo",
             components: ["buttons", "card-fields", "googlepay", "applepay"],
           },
@@ -73,7 +91,7 @@ function CheckoutScreen() {
         loadPayPalScript();
       }
     }
-  }, [paypal, paypalDispatch, loadingPayPal, errorPayPal]);
+  }, [paypal, paypalDispatch, loadingPayPal, errorPayPal, userInfo, cart]);
 
   useEffect(() => {
     if (loadedDS && loadedDB) {

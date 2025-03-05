@@ -55,7 +55,7 @@ const getShippingAddresses = asyncHandler(async (req, res) => {
     user: req.user._id,
     isShipping: true,
   });
-  console.log(addresses);
+  // console.log(addresses);
   res.status(200).json(addresses);
 });
 

@@ -28,7 +28,7 @@ const style = {
   p: 4,
 };
 
-function AddressEditModal({ address = {}, mode = "Create", isShipping }) {
+function AddressEditModal({ address, mode = "Create", isShipping }) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -78,7 +78,7 @@ function AddressEditModal({ address = {}, mode = "Create", isShipping }) {
       phone_number: phoneNumber,
       isShipping,
     };
-
+    console.log(updatedAddress);
     try {
       if (mode === "Create") {
         console.log("create address");

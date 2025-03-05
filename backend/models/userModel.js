@@ -21,9 +21,8 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
-    paypalVaulted: Boolean,
-    customer_id: String,
-    ppVaultId: String,
+    customer_id: { type: String, default: "" },
+    ppVaultId: { type: String, default: "" },
   },
   {
     timestamps: true,

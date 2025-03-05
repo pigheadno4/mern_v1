@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { PAYPAL_API_URL } from "../constants";
 import { clearCartItems } from "../slices/cartSlice";
+import { useProfileMutation } from "../slices/usersApiSlice";
 
 function PayPalButton({ paymentMethod }) {
   //   let sysOrderId = "";
@@ -15,6 +16,8 @@ function PayPalButton({ paymentMethod }) {
   //   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
   const [createInternalOrder] = useCreateOrderMutation();
+  const [updateProfile, { isLoading: loadingUpdateProfile }] =
+    useProfileMutation();
   //   const { data: order, refetch } = useGetOrderDetailsQuery(sysOrderId);
   const cart = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
@@ -61,14 +64,29 @@ function PayPalButton({ paymentMethod }) {
         },
       };
       console.log(data);
+      // Create PayPal Order for vaulting
+      let response;
+      if (cart.vault) {
+        response = await fetch(
+          `${PAYPAL_API_URL}/create-paypal-order-vaulting`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ order: data }),
+          }
+        );
+      } else {
+        response = await fetch(`${PAYPAL_API_URL}/create-paypal-order`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order: data }),
+        });
+      }
+
       // Create PayPal Order
-      const response = await fetch(`${PAYPAL_API_URL}/create-paypal-order`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ order: data }),
-      });
+
       const orderData = await response.json();
-      console.log(orderData);
+      console.log("create order response: ", orderData);
       if (!orderData.id) {
         const errorDetail = orderData.details[0];
         const errorMessage = errorDetail
@@ -101,6 +119,15 @@ function PayPalButton({ paymentMethod }) {
       console.log(sysOrderId);
       await payOrder({ orderId: sysOrderId, details }).unwrap();
       dispatch(clearCartItems());
+      // save vaulting id and customer id
+
+      if (cart.vault && userInfo.customer_id === "") {
+        const customer_id =
+          details.payment_source.paypal.attributes.vault.customer.id;
+        const ppVaultId = details.payment_source.paypal.attributes.vault.id;
+        const userId = userInfo._id;
+        await updateProfile({ userId, customer_id, ppVaultId });
+      }
       toast.success("Transaction completed!");
     } catch (err) {
       toast.error(err?.data?.message || err.message);

@@ -7,6 +7,7 @@ import Loader from "../components/Loader";
 import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
+import { setVaultStatus } from "../slices/cartSlice";
 
 function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -26,6 +27,11 @@ function LoginScreen() {
 
   useEffect(() => {
     if (userInfo) {
+      // console.log("login...........................", userInfo);
+      // if (userInfo.customer_id !== "") {
+      //   console.log("login...........................");
+      //   dispatch(setVaultStatus(true));
+      // }
       navigate(redirect);
     }
   }, [userInfo, redirect, navigate]);
@@ -36,6 +42,10 @@ function LoginScreen() {
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
+      if (res.customer_id !== "") {
+        console.log("res.customerid: ", res.customer_id);
+        dispatch(setVaultStatus(true));
+      }
       navigate(redirect);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
