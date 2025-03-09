@@ -288,7 +288,7 @@ async function getFastlaneClientToken() {
     searchParams.append("grant_type", "client_credentials");
     searchParams.append("response_type", "client_token");
     searchParams.append("intent", "sdk_init");
-    searchParams.append("domains[]", DOMAINS);
+    searchParams.append("domains[]", "mern-v1.onrender.com");
 
     const options = {
       method: "POST",
