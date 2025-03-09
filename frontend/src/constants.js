@@ -8,3 +8,5 @@ export const PAYPAL_URL = "/api/config/paypal";
 export const PAYPAL_API_URL = "/api/paypal";
 export const UPLOADS_URL = "/api/upload";
 export const ADDRESSES_URL = "/api/addresses";
+export const PAYPAL_CLIENT_ID =
+  "AfzBZwl-FwcntxnRptyFh14i-kau_lq4FYB39U8fE2zCcVLLwgCGsyetbHYufeRcFKa1tGeiC-6FU17F";

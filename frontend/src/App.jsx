@@ -6,18 +6,67 @@ import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { PAYPAL_CLIENT_ID, PAYPAL_API_URL } from "./constants";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [options, setOptions] = useState({
+    clientId: PAYPAL_CLIENT_ID,
+    currency: "USD",
+    buyerCountry: "US",
+    merchantId: "DDWAX7MLZJHDC",
+    locale: "en_US",
+    enableFunding: "venmo",
+    components: "buttons,card-fields,googlepay,applepay,messages",
+  });
+  const [collected, setCollected] = useState(false);
+
+  const { userInfo } = useSelector((state) => state.auth);
+  const cart = useSelector((state) => state.cart);
+  console.log("Home page userinfo: ", userInfo);
+  console.log("Home page cart: ", cart);
+  useEffect(() => {
+    const getCustomerId = async () => {
+      let param = {};
+      console.log("loadPayPalScript!!!!!!!!!!!!!");
+      if (cart.vault) {
+        param = {
+          target_customer_id: userInfo?.customer_id,
+        };
+      }
+      const resp = await fetch(`${PAYPAL_API_URL}/get-access-token-vault`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(param),
+      });
+      const respData = await resp.json();
+      console.log("id_token: ", respData.id_token);
+
+      setOptions((preOptions) => ({
+        ...preOptions,
+        dataUserIdToken: respData.id_token,
+      }));
+      setCollected(true);
+    };
+    getCustomerId();
+  }, [cart.vault, userInfo?.customer_id]);
+
   return (
     <>
-      <Header />
-      <main className="py-3">
-        <Container>
-          <Outlet />
-        </Container>
-      </main>
-      <Footer />
-      <ToastContainer />
+      {collected && (
+        <PayPalScriptProvider options={options}>
+          <Header />
+          <main className="py-3">
+            <Container>
+              <Outlet />
+            </Container>
+          </main>
+          <Footer />
+          <ToastContainer />
+        </PayPalScriptProvider>
+      )}
     </>
   );
 }

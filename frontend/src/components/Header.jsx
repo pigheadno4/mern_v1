@@ -1,7 +1,7 @@
 import { Navbar, Nav, Container, Badge, NavDropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
-import logo from "../assets/logo.png";
+import logo from "../assets/pear.png";
 import { useSelector, useDispatch } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { useLogoutMutation } from "../slices/usersApiSlice";
@@ -31,11 +31,20 @@ function Header() {
 
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
+      <Navbar
+        bg="primary"
+        variant="dark"
+        expand="md"
+        collapseOnSelect
+        // className=" justify-content-between"
+      >
         <Container>
+          {/* <Navbar.Brand>
+            <div>Default Shipping Address</div>
+          </Navbar.Brand> */}
           <LinkContainer to="/">
             <Navbar.Brand>
-              <img src={logo} alt="logo" />
+              <img src={logo} alt="logo" height={50} width={50} />
               Demo Shop
             </Navbar.Brand>
           </LinkContainer>

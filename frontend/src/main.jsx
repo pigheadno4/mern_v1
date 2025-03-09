@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect } from "react";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/styles/bootstrap.custom.css";
 import "./assets/styles/index.css";
@@ -80,9 +80,12 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <HelmetProvider>
       <Provider store={store}>
-        <PayPalScriptProvider deferLoading={true}>
-          <RouterProvider router={router} />
-        </PayPalScriptProvider>
+        {/* <PayPalScriptProvider
+          // deferLoading={true}
+          options={{ clientId: "test" }}
+        > */}
+        <RouterProvider router={router} />
+        {/* </PayPalScriptProvider> */}
       </Provider>
     </HelmetProvider>
   </StrictMode>

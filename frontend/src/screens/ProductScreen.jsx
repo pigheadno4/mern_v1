@@ -22,7 +22,7 @@ import { useState } from "react";
 import Meta from "../components/Meta";
 import { addToCart } from "../slices/cartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
-
+import PayPalButton from "../components/PayPalButton.jsx";
 // import { useEffect, useState } from "react";
 
 function ProductScreen() {
@@ -162,14 +162,19 @@ function ProductScreen() {
                   )}
 
                   <ListGroup.Item>
-                    <Button
-                      className="btn-block"
-                      type="button"
-                      disabled={product.countInStock === 0}
-                      onClick={addToCartHandler}
-                    >
-                      Add to Cart
-                    </Button>
+                    <Row className="mb-2">
+                      <Button
+                        variant="primary"
+                        type="button"
+                        disabled={product.countInStock === 0}
+                        onClick={addToCartHandler}
+                      >
+                        Add to Cart
+                      </Button>
+                    </Row>
+                    <Row>
+                      <PayPalButton paymentMethod={"PAYPAL"} />
+                    </Row>
                   </ListGroup.Item>
                 </ListGroup>
               </Card>

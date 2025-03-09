@@ -43,55 +43,61 @@ function CheckoutScreen() {
   // const [checkoutStage, setCheckoutStage] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("PAYPAL");
   const [show, setShow] = useState(false);
-  const [{ isResolved, isPending, isRejected, isLoading }, paypalDispatch] =
-    usePayPalScriptReducer();
+  // const [isLoaded, setIsLoaded] = useState(false);
+  // const [{ isResolved, isPending, isRejected, isLoading }, paypalDispatch] =
+  //   usePayPalScriptReducer();
   const {
     data: paypal,
     isLoading: loadingPayPal,
     error: errorPayPal,
   } = useGetPayPalClientIdQuery();
 
-  useEffect(() => {
-    if (!errorPayPal && !loadingPayPal && paypal.clientId) {
-      const loadPayPalScript = async () => {
-        let param = {};
-        // console.log("userinfo", userInfo);
-        if (cart.vault) {
-          param = {
-            target_customer_id: userInfo.customer_id,
-          };
-        }
-        console.log("param: ", param);
-        const resp = await fetch(`${PAYPAL_API_URL}/get-access-token-vault`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(param),
-        });
-        const respData = await resp.json();
-        console.log("access resp: ", respData.id_token);
-        paypalDispatch({
-          type: "resetOptions",
-          value: {
-            "client-id": paypal.clientId,
-            currency: "USD",
-            buyerCountry: "US",
-            merchantId: "DDWAX7MLZJHDC",
-            locale: "en_US",
-            dataUserIdToken: respData.id_token,
-            enableFunding: "venmo",
-            components: ["buttons", "card-fields", "googlepay", "applepay"],
-          },
-        });
-        paypalDispatch({
-          type: "setLoadingStatus",
-          value: "pending",
-        });
-      };
-      if (!window.paypal) {
-        loadPayPalScript();
-      }
-    }
-  }, [paypal, paypalDispatch, loadingPayPal, errorPayPal, userInfo, cart]);
+  // useEffect(() => {
+  //   if (!errorPayPal && !loadingPayPal && paypal.clientId) {
+  //     const loadPayPalScript = async () => {
+  //       let param = {};
+  //       // console.log("userinfo", userInfo);
+  //       if (cart.vault) {
+  //         param = {
+  //           target_customer_id: userInfo.customer_id,
+  //         };
+  //       }
+  //       console.log("param: ", param);
+  //       const resp = await fetch(`${PAYPAL_API_URL}/get-access-token-vault`, {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify(param),
+  //       });
+  //       const respData = await resp.json();
+  //       console.log("access resp: ", respData.id_token);
+  //       paypalDispatch({
+  //         type: "resetOptions",
+  //         value: {
+  //           "client-id": paypal.clientId,
+  //           currency: "USD",
+  //           buyerCountry: "US",
+  //           merchantId: "DDWAX7MLZJHDC",
+  //           locale: "en_US",
+  //           dataUserIdToken: respData.id_token,
+  //           enableFunding: "venmo",
+  //           components: ["buttons", "card-fields", "googlepay", "applepay"],
+  //         },
+  //       });
+  // paypalDispatch({
+  //   type: "setLoadingStatus",
+  //   value: "pending",
+  // });
+  // if (isResolved) {
+  //   setIsLoaded(true);
+  //   console.log(isResolved, isLoaded);
+  // }
+  //     };
+  //     if (!window.paypal) {
+  //       loadPayPalScript();
+  //     }
+  //   }
+  // }, [paypalDispatch, isResolved, isLoaded]);
+  // }, [paypal, paypalDispatch, loadingPayPal, errorPayPal, userInfo, cart]);
 
   useEffect(() => {
     if (loadedDS && loadedDB) {
@@ -253,8 +259,8 @@ function CheckoutScreen() {
                   Place Order
                 </Button> */}
 
-                {isResolved && <PayButton paymentMethod={paymentMethod} />}
-                {isLoading && <Loader />}
+                <PayButton paymentMethod={paymentMethod} />
+                {/* {isLoading && <Loader />} */}
               </ListGroup.Item>
             </ListGroup>
           </Card>
