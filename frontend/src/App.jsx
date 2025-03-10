@@ -57,8 +57,8 @@ function App() {
 
       setOptions((preOptions) => ({
         ...preOptions,
-        dataUserIdToken: respData.id_token,
-        // "data-sdk-client-token": respFastlaneClientTokenJSON.access_token,
+        // dataUserIdToken: respData.id_token,
+        "data-sdk-client-token": respFastlaneClientTokenJSON.access_token,
       }));
       setCollected(true);
     };
