@@ -19,7 +19,7 @@ function App() {
     merchantId: "DDWAX7MLZJHDC",
     locale: "en_US",
     enableFunding: "venmo",
-    components: "buttons,card-fields,googlepay,applepay,messages",
+    components: "buttons,card-fields,googlepay,applepay,messages,fastlane",
   });
   const [collected, setCollected] = useState(false);
 
@@ -36,6 +36,7 @@ function App() {
           target_customer_id: userInfo?.customer_id,
         };
       }
+      // get id token for vaulting
       const resp = await fetch(`${PAYPAL_API_URL}/get-access-token-vault`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -43,10 +44,21 @@ function App() {
       });
       const respData = await resp.json();
       console.log("id_token: ", respData.id_token);
+      // get client token for fastlane
+      const respFastlaneClientToken = await fetch(
+        `${PAYPAL_API_URL}/get-fastlane-client-token`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const respFastlaneClientTokenJSON = await respFastlaneClientToken.json();
+      console.log("client token", respFastlaneClientTokenJSON.access_token);
 
       setOptions((preOptions) => ({
         ...preOptions,
         dataUserIdToken: respData.id_token,
+        // "data-sdk-client-token": respFastlaneClientTokenJSON.access_token,
       }));
       setCollected(true);
     };

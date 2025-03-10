@@ -267,9 +267,9 @@ const createOrderVaulting = asyncHandler(async (req, res) => {
 });
 
 // fastlane access token
-async function getFastlaneClientToken() {
+const getFastlaneClientToken = asyncHandler(async (req, res) => {
   try {
-    if (!process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET) {
+    if (!process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_SECRET) {
       throw new Error("Missing API credentials");
     }
 
@@ -278,7 +278,7 @@ async function getFastlaneClientToken() {
     const headers = new Headers();
 
     const auth = Buffer.from(
-      `${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`
+      `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`
     ).toString("base64");
 
     headers.append("Authorization", `Basic ${auth}`);
@@ -298,14 +298,14 @@ async function getFastlaneClientToken() {
 
     const response = await fetch(url, options);
     const data = await response.json();
-
+    res.status(200).json(data);
     return data.access_token;
   } catch (error) {
     console.error(error);
 
     return "";
   }
-}
+});
 
 export {
   createOrder,
