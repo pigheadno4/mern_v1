@@ -65,7 +65,7 @@ function App() {
         ...preOptions,
 
         // "data-sdk-client-token": respFastlaneClientTokenJSON.access_token,
-        dataNamespace: "vaultsdk",
+        // dataNamespace: "vaultsdk",
         dataUserIdToken: respData.id_token,
       }));
       setFastlaneOptions((preOptions) => ({
