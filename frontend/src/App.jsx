@@ -19,7 +19,13 @@ function App() {
     merchantId: "DDWAX7MLZJHDC",
     locale: "en_US",
     enableFunding: "venmo",
-    components: "buttons,card-fields,googlepay,applepay,messages,fastlane",
+    components: "buttons,card-fields,googlepay,applepay,messages",
+  });
+  const [fastlaneOptions, setFastlaneOptions] = useState({
+    clientId: PAYPAL_CLIENT_ID,
+    currency: "USD",
+    buyerCountry: "US",
+    components: "buttons,fastlane",
   });
   const [collected, setCollected] = useState(false);
 
@@ -57,7 +63,14 @@ function App() {
 
       setOptions((preOptions) => ({
         ...preOptions,
-        // dataUserIdToken: respData.id_token,
+
+        // "data-sdk-client-token": respFastlaneClientTokenJSON.access_token,
+        dataNamespace: "vaultsdk",
+        dataUserIdToken: respData.id_token,
+      }));
+      setFastlaneOptions((preOptions) => ({
+        ...preOptions,
+        dataNamespace: "fastlanesdk",
         "data-sdk-client-token": respFastlaneClientTokenJSON.access_token,
       }));
       setCollected(true);
@@ -68,15 +81,17 @@ function App() {
   return (
     <>
       {collected && (
-        <PayPalScriptProvider options={options}>
-          <Header />
-          <main className="py-3">
-            <Container>
-              <Outlet />
-            </Container>
-          </main>
-          <Footer />
-          <ToastContainer />
+        <PayPalScriptProvider options={fastlaneOptions}>
+          <PayPalScriptProvider options={options}>
+            <Header />
+            <main className="py-3">
+              <Container>
+                <Outlet />
+              </Container>
+            </main>
+            <Footer />
+            <ToastContainer />
+          </PayPalScriptProvider>
         </PayPalScriptProvider>
       )}
     </>
