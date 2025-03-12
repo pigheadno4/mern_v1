@@ -8,7 +8,7 @@ function EmailVerifyInput() {
 
   useEffect(() => {
     const initialFastlane = async () => {
-      const fastlaneObj = await paypal.Fastlane({
+      const fastlaneObj = await fastlanesdk.Fastlane({
         // shippingAddressOptions: {
         //   allowedLocations: [],
         // },
