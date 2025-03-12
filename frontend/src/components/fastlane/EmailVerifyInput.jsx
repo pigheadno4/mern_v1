@@ -1,32 +1,35 @@
 import { Form, Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import { usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 function EmailVerifyInput() {
   const [email, setEmail] = useState("");
   const [fastlane, setFastlane] = useState("");
   const [loaded, setLoaded] = useState(false);
-
+  const [{ isResolved }] = usePayPalScriptReducer();
   useEffect(() => {
     const initialFastlane = async () => {
-      const fastlaneObj = await fastlanesdk.Fastlane({
-        // shippingAddressOptions: {
-        //   allowedLocations: [],
-        // },
-        // cardOptions: {
-        //   allowedBrands: [],
-        // },
-      });
+      if (isResolved) {
+        const fastlaneObj = await fastlanesdk.Fastlane({
+          // shippingAddressOptions: {
+          //   allowedLocations: [],
+          // },
+          // cardOptions: {
+          //   allowedBrands: [],
+          // },
+        });
 
-      (
-        await fastlaneObj.FastlaneWatermarkComponent({
-          includeAdditionalInfo: true,
-        })
-      ).render("#watermark-container");
-      setFastlane(fastlaneObj);
-      setLoaded(true);
+        (
+          await fastlaneObj.FastlaneWatermarkComponent({
+            includeAdditionalInfo: true,
+          })
+        ).render("#watermark-container");
+        setFastlane(fastlaneObj);
+        setLoaded(true);
+      }
     };
     initialFastlane();
-  }, []);
+  }, [isResolved]);
   const submitHandler = async (e) => {
     e.preventDefault();
     await fastlane.identity.lookupCustomerByEmail(email);
