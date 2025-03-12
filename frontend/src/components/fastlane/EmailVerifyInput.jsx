@@ -18,7 +18,7 @@ function EmailVerifyInput() {
       });
 
       (
-        await FastlaneWatermarkComponent({
+        await fastlaneObj.FastlaneWatermarkComponent({
           includeAdditionalInfo: true,
         })
       ).render("#watermark-container");
