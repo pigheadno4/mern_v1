@@ -3,15 +3,12 @@ import { useEffect, useState } from "react";
 
 function EmailVerifyInput() {
   const [email, setEmail] = useState("");
+  const [fastlane, setFastlane] = useState("");
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const initialFastlane = async () => {
-      const {
-        identity,
-        profile,
-        FastlanePaymentComponent,
-        FastlaneWatermarkComponent,
-      } = await paypal.Fastlane({
+      const fastlaneObj = await paypal.Fastlane({
         // shippingAddressOptions: {
         //   allowedLocations: [],
         // },
@@ -25,29 +22,34 @@ function EmailVerifyInput() {
           includeAdditionalInfo: true,
         })
       ).render("#watermark-container");
+      setFastlane(fastlaneObj);
+      setLoaded(true);
     };
     initialFastlane();
   }, []);
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+    await fastlane.identity.lookupCustomerByEmail(email);
   };
   return (
-    <Form onSubmit={submitHandler} className="d-flex">
-      <fieldset className="email-input-with-watermark">
-        <Form.Control
-          type="text"
-          name="q"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-          placeholder="Fastlane Email Address"
-          className="mr-sm-2 ml-sm-5"
-        ></Form.Control>
-        <div id="watermark-container"></div>
-      </fieldset>
-      <Button type="submit" variant="outline-light" className="p-2 mx-2">
-        Continue
-      </Button>
-    </Form>
+    loaded && (
+      <Form onSubmit={submitHandler} className="d-flex">
+        <fieldset className="email-input-with-watermark">
+          <Form.Control
+            type="text"
+            name="q"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            placeholder="Fastlane Email Address"
+            className="mr-sm-2 ml-sm-5"
+          ></Form.Control>
+          <div id="watermark-container"></div>
+        </fieldset>
+        <Button type="submit" variant="outline-light" className="p-2 mx-2">
+          Continue
+        </Button>
+      </Form>
+    )
   );
 }
 export default EmailVerifyInput;
