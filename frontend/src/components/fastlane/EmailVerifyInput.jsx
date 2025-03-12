@@ -10,7 +10,7 @@ function EmailVerifyInput() {
   useEffect(() => {
     const initialFastlane = async () => {
       if (isResolved) {
-        const fastlaneObj = await fastlanesdk.Fastlane({
+        const fastlaneObj = await window.fastlanesdk.Fastlane({
           // shippingAddressOptions: {
           //   allowedLocations: [],
           // },
