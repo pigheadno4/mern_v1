@@ -110,7 +110,7 @@ function GPayButton() {
         body: JSON.stringify({ order: data }),
       });
       const orderData = await response.json();
-      const { status } = await paypal.Googlepay().confirmOrder({
+      const { status } = await window.vaultsdk.Googlepay().confirmOrder({
         orderId: orderData.id,
         paymentMethodData: paymentData.paymentMethodData,
       });
@@ -155,7 +155,7 @@ function GPayButton() {
   };
   useEffect(() => {
     const preparePaymentRequest = async () => {
-      const googlePayConfig = await paypal.Googlepay().config();
+      const googlePayConfig = await window.vaultsdk.Googlepay().config();
       console.log("googlePay Config", googlePayConfig);
       const allowedPaymentMethods = googlePayConfig.allowedPaymentMethods;
       console.log("allowedPaymentMethods:", allowedPaymentMethods);

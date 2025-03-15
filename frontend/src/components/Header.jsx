@@ -9,7 +9,7 @@ import { logout } from "../slices/authSlice";
 import SearchBox from "./SearchBox";
 import { resetCart } from "../slices/cartSlice";
 
-import EmailVerifyInput from "./fastlane/EmailVerifyInput";
+// import EmailVerifyInput from "./fastlane/EmailVerifyInput";
 function Header() {
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
@@ -50,7 +50,7 @@ function Header() {
             </Navbar.Brand>
           </LinkContainer>
           {/* fastlane email input */}
-          <EmailVerifyInput />
+          {/* <EmailVerifyInput /> */}
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">

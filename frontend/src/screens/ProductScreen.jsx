@@ -23,6 +23,7 @@ import Meta from "../components/Meta";
 import { addToCart } from "../slices/cartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import PayPalButton from "../components/PayPalButton.jsx";
+import EmailVerifyInput from "../components/fastlane/EmailVerifyInput.jsx";
 // import { useEffect, useState } from "react";
 
 function ProductScreen() {
@@ -175,6 +176,7 @@ function ProductScreen() {
                     <Row>
                       <PayPalButton paymentMethod={"PAYPAL"} />
                     </Row>
+                    <EmailVerifyInput />
                   </ListGroup.Item>
                 </ListGroup>
               </Card>

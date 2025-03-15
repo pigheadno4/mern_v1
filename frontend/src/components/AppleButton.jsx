@@ -185,7 +185,7 @@ function APayButton() {
   }
   useEffect(() => {
     const preparePaymentRequest = async () => {
-      const applePayConfig = await paypal.Applepay().config();
+      const applePayConfig = await window.vaultsdk.Applepay().config();
       // setApplepay();
       console.log("Apple Config:", applePayConfig);
       if (applePayConfig.isEligible) {
@@ -194,7 +194,7 @@ function APayButton() {
         document
           .getElementById("btn-appl")
           .addEventListener("click", () =>
-            onClick(applePayConfig, paypal.Applepay())
+            onClick(applePayConfig, window.vaultsdk.Applepay())
           );
       }
       // setAppleConfig(applePayConfig);
