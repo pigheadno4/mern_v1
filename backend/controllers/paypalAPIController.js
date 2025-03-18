@@ -4,7 +4,7 @@ const createOrder = asyncHandler(async (req, res) => {
   const accessToken = req.accessToken;
   const url = `${process.env.PAYPAL_BASE}/v2/checkout/orders`;
   const PayPal_Request_Id = crypto.randomUUID();
-  //   console.log(PayPal_Request_Id);
+  console.log("create normal order");
   //   console.log(url);
   //   console.log(accessToken);
   // console.log("PayPal Create Order Request Body: ", req.body);
@@ -35,10 +35,18 @@ const createOrder = asyncHandler(async (req, res) => {
         paypal: {
           experience_context: {
             brand_name: "Pig Head No4 Intl Store",
-            shipping_preference: "SET_PROVIDED_ADDRESS",
+            shipping_preference: "GET_FROM_FILE",
             user_action: "PAY_NOW",
             return_url: "https://example.com/returnUrl",
             cancel_url: "https://example.com/cancelUrl",
+            order_update_callback_config: {
+              callback_events: ["SHIPPING_ADDRESS", "SHIPPING_OPTIONS"],
+              callback_url:
+                "https://mern-v1.onrender.com/api/paypal/get-shipping-update",
+            },
+            // app_switch_preference: {
+            //   launch_paypal_app: true,
+            // },
           },
           email_address: req.body.order.user.email,
           name: req.body.order.billingAddress.name,
@@ -84,6 +92,28 @@ const createOrder = asyncHandler(async (req, res) => {
           },
           items: items,
           shipping: {
+            options: [
+              {
+                id: "001",
+                label: "UPS",
+                selected: true,
+                type: "SHIPPING",
+                amount: {
+                  currency_code: "USD",
+                  value: "0.00",
+                },
+              },
+              {
+                id: "002",
+                label: "FEDEX",
+                selected: false,
+                type: "SHIPPING",
+                amount: {
+                  currency_code: "USD",
+                  value: "3.00",
+                },
+              },
+            ],
             name: {
               full_name: req.body.order.shippingAddress.name.surname,
             },
@@ -157,6 +187,7 @@ const createOrderVaulting = asyncHandler(async (req, res) => {
   const accessToken = req.accessToken;
   const url = `${process.env.PAYPAL_BASE}/v2/checkout/orders`;
   const PayPal_Request_Id = crypto.randomUUID();
+  console.log("create vaulting order");
   //   console.log(PayPal_Request_Id);
   //   console.log(url);
   //   console.log(accessToken);
@@ -261,7 +292,7 @@ const createOrderVaulting = asyncHandler(async (req, res) => {
     }),
   });
   const resp = await response.json();
-  console.log(resp);
+  // console.log(resp);
   res.json(resp);
   return resp;
 });
@@ -307,10 +338,16 @@ const getFastlaneClientToken = asyncHandler(async (req, res) => {
   }
 });
 
+// shipping callback
+const getShippingInfo = asyncHandler(async (req, res) => {
+  console.log(req.body);
+});
+
 export {
   createOrder,
   captureOrder,
   getAccessTokenVault,
   createOrderVaulting,
   getFastlaneClientToken,
+  getShippingInfo,
 };

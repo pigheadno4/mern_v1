@@ -6,6 +6,7 @@ import {
   getAccessTokenVault,
   createOrderVaulting,
   getFastlaneClientToken,
+  getShippingInfo,
 } from "../controllers/paypalAPIController.js";
 
 const router = express.Router();
@@ -19,5 +20,6 @@ router.post(
 );
 router.post("/get-access-token-vault", getAccessTokenVault);
 router.post("/get-fastlane-client-token", getFastlaneClientToken);
+router.get("/get-shipping-update", getShippingInfo);
 
 export default router;
