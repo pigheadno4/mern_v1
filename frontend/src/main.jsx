@@ -35,7 +35,7 @@ import ProductEditScreen from "./screens/admin/ProductEditScreen.jsx";
 import UserListScreen from "./screens/admin/UserListScreen.jsx";
 import UserEditScreen from "./screens/admin/UserEditScreen.jsx";
 import CheckoutScreen from "./screens/CheckoutScreen.jsx";
-import { PAYPAL_CLIENT_ID, PAYPAL_API_URL } from "./constants";
+// import { PAYPAL_CLIENT_ID, PAYPAL_API_URL } from "./constants";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -77,36 +77,36 @@ const router = createBrowserRouter(
   )
 );
 
-const respFastlaneClientToken = await fetch(
-  `${PAYPAL_API_URL}/get-fastlane-client-token`,
-  {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-  }
-);
-const respFastlaneClientTokenJSON = await respFastlaneClientToken.json();
-console.log("main.jsx running fastlane token: ", respFastlaneClientTokenJSON);
+// const respFastlaneClientToken = await fetch(
+//   `${PAYPAL_API_URL}/get-fastlane-client-token`,
+//   {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//   }
+// );
+// const respFastlaneClientTokenJSON = await respFastlaneClientToken.json();
+// console.log("main.jsx running fastlane token: ", respFastlaneClientTokenJSON);
 
-const fastlaneOptions = {
-  clientId: PAYPAL_CLIENT_ID,
-  currency: "USD",
-  buyerCountry: "US",
-  components: "buttons,fastlane",
-  "data-sdk-client-token": respFastlaneClientTokenJSON.access_token,
-};
+// const fastlaneOptions = {
+//   clientId: PAYPAL_CLIENT_ID,
+//   currency: "USD",
+//   buyerCountry: "US",
+//   components: "buttons,fastlane",
+//   "data-sdk-client-token": respFastlaneClientTokenJSON.access_token,
+// };
 
-console.log("main.jsx running fastlane option: ", fastlaneOptions);
+// console.log("main.jsx running fastlane option: ", fastlaneOptions);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <HelmetProvider>
       <Provider store={store}>
-        <PayPalScriptProvider
+        {/* <PayPalScriptProvider
           // deferLoading={true}
           options={fastlaneOptions}
-        >
-          <RouterProvider router={router} />
-        </PayPalScriptProvider>
+        > */}
+        <RouterProvider router={router} />
+        {/* </PayPalScriptProvider> */}
       </Provider>
     </HelmetProvider>
   </StrictMode>

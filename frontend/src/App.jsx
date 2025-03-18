@@ -21,12 +21,12 @@ function App() {
     enableFunding: "venmo",
     components: "buttons,card-fields,googlepay,applepay,messages",
   });
-  // const [fastlaneOptions, setFastlaneOptions] = useState({
-  //   clientId: PAYPAL_CLIENT_ID,
-  //   currency: "USD",
-  //   buyerCountry: "US",
-  //   components: "buttons,fastlane",
-  // });
+  const [fastlaneOptions, setFastlaneOptions] = useState({
+    clientId: PAYPAL_CLIENT_ID,
+    currency: "USD",
+    buyerCountry: "US",
+    components: "buttons,fastlane",
+  });
   const [collected, setCollected] = useState(false);
 
   const { userInfo } = useSelector((state) => state.auth);
@@ -51,15 +51,15 @@ function App() {
       const respData = await resp.json();
       console.log("id_token: ", respData.id_token);
       // get client token for fastlane
-      // const respFastlaneClientToken = await fetch(
-      //   `${PAYPAL_API_URL}/get-fastlane-client-token`,
-      //   {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //   }
-      // );
-      // const respFastlaneClientTokenJSON = await respFastlaneClientToken.json();
-      // console.log("client token", respFastlaneClientTokenJSON.access_token);
+      const respFastlaneClientToken = await fetch(
+        `${PAYPAL_API_URL}/get-fastlane-client-token`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const respFastlaneClientTokenJSON = await respFastlaneClientToken.json();
+      console.log("client token", respFastlaneClientTokenJSON.access_token);
 
       setOptions((preOptions) => ({
         ...preOptions,
@@ -68,11 +68,11 @@ function App() {
         dataNamespace: "vaultsdk",
         dataUserIdToken: respData.id_token,
       }));
-      // setFastlaneOptions((preOptions) => ({
-      //   ...preOptions,
-      //   // dataNamespace: "fastlanesdk",
-      //   "data-sdk-client-token": respFastlaneClientTokenJSON.access_token,
-      // }));
+      setFastlaneOptions((preOptions) => ({
+        ...preOptions,
+        // dataNamespace: "fastlanesdk",
+        "data-sdk-client-token": respFastlaneClientTokenJSON.access_token,
+      }));
       setCollected(true);
     };
     getCustomerId();
@@ -81,18 +81,18 @@ function App() {
   return (
     <>
       {collected && (
-        // <PayPalScriptProvider options={fastlaneOptions}>
-        <PayPalScriptProvider options={options}>
-          <Header />
-          <main className="py-3">
-            <Container>
-              <Outlet />
-            </Container>
-          </main>
-          <Footer />
-          <ToastContainer />
+        <PayPalScriptProvider options={fastlaneOptions}>
+          <PayPalScriptProvider options={options}>
+            <Header />
+            <main className="py-3">
+              <Container>
+                <Outlet />
+              </Container>
+            </main>
+            <Footer />
+            <ToastContainer />
+          </PayPalScriptProvider>
         </PayPalScriptProvider>
-        // </PayPalScriptProvider>
       )}
     </>
   );
