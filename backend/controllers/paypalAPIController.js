@@ -39,11 +39,11 @@ const createOrder = asyncHandler(async (req, res) => {
             user_action: "PAY_NOW",
             return_url: "https://example.com/returnUrl",
             cancel_url: "https://example.com/cancelUrl",
-            order_update_callback_config: {
-              callback_events: ["SHIPPING_ADDRESS", "SHIPPING_OPTIONS"],
-              callback_url:
-                "https://mern-v1.onrender.com/api/paypal/get-shipping-update",
-            },
+            // order_update_callback_config: {
+            //   callback_events: ["SHIPPING_ADDRESS", "SHIPPING_OPTIONS"],
+            //   callback_url:
+            //     "https://mern-v1.onrender.com/api/paypal/get-shipping-update",
+            // },
             // app_switch_preference: {
             //   launch_paypal_app: true,
             // },
