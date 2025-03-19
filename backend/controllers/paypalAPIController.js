@@ -1,7 +1,11 @@
 import asyncHandler from "../middleware/asyncHandler.js";
+import path from "path";
 
 const createOrder = asyncHandler(async (req, res) => {
   const accessToken = req.accessToken;
+  const __dirname = path.resolve();
+  const callbackUrl = path.join(__dirname, "/api/paypal/get-shipping-update");
+  console.log("callback url: ", callbackUrl);
   const url = `${process.env.PAYPAL_BASE}/v2/checkout/orders`;
   const PayPal_Request_Id = crypto.randomUUID();
   console.log("create normal order");
@@ -41,8 +45,7 @@ const createOrder = asyncHandler(async (req, res) => {
             cancel_url: "https://example.com/cancelUrl",
             order_update_callback_config: {
               callback_events: ["SHIPPING_ADDRESS", "SHIPPING_OPTIONS"],
-              callback_url:
-                "https://mern-v1.onrender.com/api/paypal/get-shipping-update",
+              callback_url: callbackUrl,
             },
             // app_switch_preference: {
             //   launch_paypal_app: true,
