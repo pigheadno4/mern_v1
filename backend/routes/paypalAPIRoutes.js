@@ -20,6 +20,6 @@ router.post(
 );
 router.post("/get-access-token-vault", getAccessTokenVault);
 router.post("/get-fastlane-client-token", getFastlaneClientToken);
-router.get("/get-shipping-update", getShippingInfo);
+router.post("/get-shipping-update", getShippingInfo);
 
 export default router;
