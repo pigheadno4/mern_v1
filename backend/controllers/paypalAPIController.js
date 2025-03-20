@@ -349,7 +349,10 @@ const getShippingInfo = asyncHandler(async (req, res) => {
   // const respData = {
   //   id: reqData.id,
   // };
-  res.status(200).json({ id: reqData.id });
+  res.status(200).json({
+    id: reqData.id,
+    purchase_units: reqData.purchase_units,
+  });
 });
 
 export {
