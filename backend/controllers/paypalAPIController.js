@@ -348,7 +348,7 @@ const getShippingInfo = asyncHandler(async (req, res) => {
   const reqData = req.body;
   const resData = {
     id: reqData.id,
-    purchase_units: reqData.purchase_units,
+    purchase_units: [...reqData.purchase_units],
   };
   console.log("resData: ", resData);
   // const respData = {
