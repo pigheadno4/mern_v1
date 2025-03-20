@@ -346,13 +346,15 @@ const getFastlaneClientToken = asyncHandler(async (req, res) => {
 const getShippingInfo = asyncHandler(async (req, res) => {
   console.log("getShippingInfo : ", req.body);
   const reqData = req.body;
+  const resData = {
+    id: reqData.id,
+    purchase_units: reqData.purchase_units,
+  };
+  console.log("resData: ", resData);
   // const respData = {
   //   id: reqData.id,
   // };
-  res.status(200).json({
-    id: reqData.id,
-    purchase_units: reqData.purchase_units,
-  });
+  res.status(200).json(resData);
 });
 
 export {
