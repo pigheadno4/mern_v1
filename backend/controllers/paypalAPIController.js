@@ -344,7 +344,7 @@ const getFastlaneClientToken = asyncHandler(async (req, res) => {
 
 // shipping callback
 const getShippingInfo = asyncHandler(async (req, res) => {
-  console.log(req.body);
+  console.log("getShippingInfo : ", req.body);
   const reqData = req.body;
   // const respData = {
   //   id: reqData.id,
