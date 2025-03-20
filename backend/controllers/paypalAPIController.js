@@ -353,7 +353,7 @@ const getShippingInfo = asyncHandler(async (req, res) => {
       {
         reference_id: reqData.purchase_units[0].reference_id,
         amount: reqData.purchase_units[0].amount,
-        shipping_options: reqData.purchase_units[0].shipping_options,
+        shipping_options: reqData.purchase_units[0].shipping.options,
       },
     ],
   };
