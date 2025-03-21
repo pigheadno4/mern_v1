@@ -121,6 +121,11 @@ const createOrder = asyncHandler(async (req, res) => {
             name: {
               full_name: req.body.order.shippingAddress.name.surname,
             },
+            email_address: req.body.order.user.email,
+            phone_number: {
+              country_code: "1",
+              national_number: req.body.order.billingAddress.phone_number,
+            },
             address: {
               address_line_1: req.body.order.shippingAddress.address_line_1,
               address_line_2: req.body.order.shippingAddress.address_line_2,
