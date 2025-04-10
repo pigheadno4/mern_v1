@@ -133,18 +133,12 @@ function APayButton() {
         /**
          * Confirm Payment
          */
-        // const confirmResp = await applepay.confirmOrder({
-        //   orderId: orderData.id,
-        //   token: event.payment.token,
-        //   // billingContact: event.payment.billingContact,
-        //   // shippingContact: event.payment.shippingContact,
-        // });
-        applepay.confirmOrder({
+        const confirmResp = await applepay.confirmOrder({
           orderId: orderData.id,
           token: event.payment.token,
-          // billingContact: event.payment.billingContact,
-          // shippingContact: event.payment.shippingContact,
-        }).then((payload) => {console.log('confirm apple try success')}).catch((err) => {console.log('apple pay confirm order error: ', err)})
+          billingContact: event.payment.billingContact,
+          shippingContact: event.payment.shippingContact,
+        });
         console.log("confirm apple order resp:", confirmResp);
         /*
          * Capture order (must currently be made on server)
