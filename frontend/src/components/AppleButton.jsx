@@ -136,8 +136,8 @@ function APayButton() {
         const confirmResp = await applepay.confirmOrder({
           orderId: orderData.id,
           token: event.payment.token,
-          billingContact: event.payment.billingContact,
-          shippingContact: event.payment.shippingContact,
+          // billingContact: event.payment.billingContact,
+          // shippingContact: event.payment.shippingContact,
         });
         console.log("confirm apple order resp:", confirmResp);
         /*
